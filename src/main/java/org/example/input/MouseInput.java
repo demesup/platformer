@@ -17,16 +17,17 @@ MouseInput implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Mouse clicked");
-
+        gamePanel.getGame().getState().getState().mouseClicked(e);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        gamePanel.getGame().getState().getState().mousePressed(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        gamePanel.getGame().getState().getState().mouseReleased(e);
 
     }
 
@@ -47,6 +48,6 @@ MouseInput implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-//        gamePanel.setRectPosition(e.getX(), e.getY());
+        gamePanel.getGame().getState().getState().mouseMoved(e);
     }
 }
