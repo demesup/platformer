@@ -1,15 +1,21 @@
-package org.example.ui;
+package org.example.button;
 
 import java.awt.*;
 
-public class PauseButton extends Button {
-    private int width, height;
+public abstract class PauseButton extends Button {
+    protected int width, height;
 
     public PauseButton(int x, int y, int width, int height) {
         super(x, y, new Rectangle(x, y, width, height));
         this.width = width;
         this.height = height;
         createBounds();
+    }
+
+    public PauseButton(int x, int y, int width, int height, int rowIndex) {
+        super(x, y, rowIndex, new Rectangle(x, y, width, height));
+        this.width = width;
+        this.height = height;
     }
 
     private void createBounds() {

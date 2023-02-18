@@ -1,47 +1,27 @@
 package org.example.gamestates;
 
-import org.example.ui.MenuButton;
+import org.example.Drawable;
+import org.example.Updatable;
+import org.example.button.Button;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public abstract class State {
+public abstract class State implements MouseEventResponse, KeyEventResponse, Drawable, Updatable {
+    protected Button[] buttons;
 
     public State() {
     }
 
-    public boolean isIn(MouseEvent e, MenuButton button) {
+    public boolean isIn(MouseEvent e, Button button) {
         return button.getBounds().contains(e.getPoint());
     }
 
-    public abstract void update();
-
-    public void draw(Graphics graphics) {
-    }
-
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    public void mousePressed(MouseEvent e) {
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    public void keyPressed(KeyEvent e) {
-    }
-
-    public void keyReleased(KeyEvent e) {
+    protected void resetButtons() {
+        for (Button button : buttons) {
+            button.resetBooleans();
+        }
     }
 
     public void windowFocusLost() {
-    }
-
-    public void mouseDragged(MouseEvent e){
-
     }
 }

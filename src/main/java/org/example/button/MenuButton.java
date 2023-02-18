@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.button;
 
 import org.example.gamestates.GameState;
 import org.example.utils.Image;
@@ -16,11 +16,9 @@ public class MenuButton extends Button {
     public static final int B_WIDTH = (int) (B_WIDTH_DEFAULT * SCALE);
     public static final int B_HEIGHT = (int) (B_HEIGHT_DEFAULT * SCALE);
     private GameState state;
-    private int rowIndex;
     private static int xOffsetCenter = B_WIDTH / 2;
     private int index;
     private BufferedImage[] images;
-    private boolean mouseOver, mousePressed;
 
     public MenuButton(int x, int y, int rowIndex, GameState state) {
         super(x, y, new Rectangle(x - xOffsetCenter, y, B_WIDTH, B_HEIGHT));
@@ -34,7 +32,8 @@ public class MenuButton extends Button {
     }
 
 
-    private void loadImages() {
+    @Override
+    protected void loadImages() {
         images = new BufferedImage[3];
         BufferedImage temp = getSpriteAtlas(Image.MENU_BUTTONS);
         for (int i = 0; i < images.length; i++) {
@@ -42,10 +41,12 @@ public class MenuButton extends Button {
         }
     }
 
+    @Override
     public void draw(Graphics graphics) {
         graphics.drawImage(images[index], x - xOffsetCenter, y, B_WIDTH, B_HEIGHT, null);
     }
 
+    @Override
     public void update() {
         index = 0;
         if (mouseOver) {
@@ -56,30 +57,8 @@ public class MenuButton extends Button {
         }
     }
 
-    public boolean isMouseOver() {
-        return mouseOver;
-    }
-
-    public void setMouseOver(boolean mouseOver) {
-        this.mouseOver = mouseOver;
-    }
-
-    public boolean isMousePressed() {
-        return mousePressed;
-    }
-
-    public void setMousePressed(boolean mousePressed) {
-        this.mousePressed = mousePressed;
-    }
-
     public Rectangle getBounds() {
         return bounds;
-    }
-
-
-    public void resetBooleans() {
-        mouseOver = false;
-        mousePressed = false;
     }
 
     public void setState(GameState state) {

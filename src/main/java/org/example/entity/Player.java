@@ -37,13 +37,15 @@ public class Player extends Entity {
 
     }
 
+    @Override
     public void update() {
         updatePos();
         updateAnimationTick();
         setAnimation();
     }
 
-    public void render(Graphics g) {
+    @Override
+    public void draw(Graphics g) {
         g.drawImage(animations[playerAction.ordinal()][aniIndex], (int) (hitBox.x - xDrawOffset), (int) (hitBox.y - yDrawOffset), width, height, null);
 //        drawHitBox(g);
     }

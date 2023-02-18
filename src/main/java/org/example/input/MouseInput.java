@@ -6,6 +6,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import static org.example.gamestates.GameState.PAUSE;
+import static org.example.gamestates.GameState.overlayState;
+
 public class
 
 MouseInput implements MouseListener, MouseMotionListener {
@@ -43,7 +46,9 @@ MouseInput implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        if (overlayState.equals(PAUSE)) {
+            PAUSE.getState().mouseDragged(e);
+        }
     }
 
     @Override

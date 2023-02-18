@@ -1,12 +1,30 @@
 package org.example.gamestates;
 
+import java.awt.event.MouseEvent;
+
 public class Options extends State{
     public Options() {
-        System.out.println("Options");
     }
 
     @Override
     public void update() {
+
+    }
+
+    
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
 
     }
 }

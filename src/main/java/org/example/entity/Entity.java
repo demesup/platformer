@@ -1,9 +1,12 @@
 package org.example.entity;
 
+import org.example.Drawable;
+import org.example.Updatable;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public abstract class Entity {
+public abstract class Entity implements Updatable, Drawable {
     protected float x, y;
     protected int width, height;
     protected Rectangle2D.Float hitBox;
