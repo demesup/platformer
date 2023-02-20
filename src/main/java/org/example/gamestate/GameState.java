@@ -1,4 +1,4 @@
-package org.example.gamestates;
+package org.example.gamestate;
 
 
 public enum GameState {

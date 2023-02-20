@@ -1,13 +1,15 @@
 package org.example.level;
 
+import org.example.Drawable;
 import org.example.utils.LoadSafe;
-import org.example.utils.Image;
-import org.example.main.Game;
+import org.example.utils.constant.Image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class LevelHandler {
+import static org.example.utils.constant.ItemInfo.TILES_I;
+
+public class LevelHandler implements Drawable {
     private BufferedImage[] levelSprite;
     private Level levelOne;
 
@@ -27,11 +29,12 @@ public class LevelHandler {
         }
     }
 
-    public void draw(Graphics graphics) {
-        for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
-            for (int i = 0; i < Game.TILES_IN_WIDTH; i++) {
+    @Override
+    public void draw(Graphics graphics, int xLevelOffset) {
+        for (int j = 0; j < TILES_I.defaultHeight; j++)
+            for (int i = 0; i < levelOne.levelData()[0].length; i++) {
                 int index = levelOne.getSpriteIndex(i, j);
-                graphics.drawImage(levelSprite[index], Game.TILES_SIZE * i, Game.TILES_SIZE * j, Game.TILES_SIZE, Game.TILES_SIZE, null);
+                graphics.drawImage(levelSprite[index], TILES_I.size * i - xLevelOffset, TILES_I.size * j, TILES_I.size, TILES_I.size, null);
             }
     }
 

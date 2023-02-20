@@ -1,4 +1,4 @@
-package org.example.gamestates;
+package org.example.gamestate;
 
 import org.example.Updatable;
 import org.example.button.*;
@@ -14,12 +14,14 @@ import static org.example.button.UrmButton.URM_SIZE;
 import static org.example.main.Game.GAME_WIDTH;
 import static org.example.main.Game.SCALE;
 import static org.example.main.Main.game;
-import static org.example.utils.Image.PAUSE_BACKGROUND;
+import static org.example.utils.constant.Image.PAUSE_BACKGROUND;
 import static org.example.utils.LoadSafe.getSpriteAtlas;
+import static org.example.utils.constant.ItemInfo.SLIDER_I;
+import static org.example.utils.constant.ItemInfo.VOLUME_I;
 
 public class PauseOverlay extends State {
-    private ArrayList<PauseButton> buttons = new ArrayList<>();
-    private Playing playing = (Playing) GameState.PLAYING.getState();
+    private final ArrayList<PauseButton> buttons = new ArrayList<>();
+    private final Playing playing = (Playing) GameState.PLAYING.getState();
     private BufferedImage backgroundImg;
     private int bgX, bgY, bgW, bgH;
     private SoundButton musicButton, sfxButton;
@@ -36,7 +38,7 @@ public class PauseOverlay extends State {
     private void createVolumeButton() {
         int vX = (int) (309 * SCALE);
         int vY = (int) (278 * SCALE);
-        volumeButton = new VolumeButton(vX, vY, VolumeButton.SLIDER_WIDTH, VolumeButton.VOLUME_HEIGHT);
+        volumeButton = new VolumeButton(vX, vY, SLIDER_I.width, VOLUME_I.width);
 
         buttons.add(volumeButton);
     }

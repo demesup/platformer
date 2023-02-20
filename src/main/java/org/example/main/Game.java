@@ -1,26 +1,23 @@
 package org.example.main;
 
-import org.example.gamestates.GameState;
+import org.example.gamestate.GameState;
 
 import java.awt.*;
 
+import static org.example.utils.constant.ItemInfo.TILES_I;
+
 public class Game {
-    private GamePanel gamePanel;
-    private GameWindow gameWindow;
+    private final GamePanel gamePanel;
     private GameState state;
-    public static final int TILES_DEFAULT_SIZE = 32;
     public static final float SCALE = 1.5F;
-    public static final int TILES_IN_WIDTH = 26;
-    public static final int TILES_IN_HEIGHT = 14;
-    public static final int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
-    public static final int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
-    public static final int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
+      public static final int GAME_WIDTH = TILES_I.size * TILES_I.defaultWidth;
+    public static final int GAME_HEIGHT = TILES_I.size * TILES_I.defaultHeight;
 
     public Game() {
         initClasses();
 
         gamePanel = new GamePanel();
-        gameWindow = new GameWindow(gamePanel);
+        new GameWindow(gamePanel);
         gamePanel.requestFocus();
     }
 

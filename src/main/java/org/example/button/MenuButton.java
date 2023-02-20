@@ -1,27 +1,23 @@
 package org.example.button;
 
-import org.example.gamestates.GameState;
-import org.example.utils.Image;
+import org.example.gamestate.GameState;
+import org.example.utils.constant.Image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static org.example.main.Game.SCALE;
 import static org.example.main.Main.game;
 import static org.example.utils.LoadSafe.getSpriteAtlas;
+import static org.example.utils.constant.ItemInfo.BUTTON_I;
 
 public class MenuButton extends Button {
-    public static final int B_WIDTH_DEFAULT = 140;
-    public static final int B_HEIGHT_DEFAULT = 56;
-    public static final int B_WIDTH = (int) (B_WIDTH_DEFAULT * SCALE);
-    public static final int B_HEIGHT = (int) (B_HEIGHT_DEFAULT * SCALE);
     private GameState state;
-    private static int xOffsetCenter = B_WIDTH / 2;
+    private static final int xOffsetCenter = BUTTON_I.width / 2;
     private int index;
     private BufferedImage[] images;
 
     public MenuButton(int x, int y, int rowIndex, GameState state) {
-        super(x, y, new Rectangle(x - xOffsetCenter, y, B_WIDTH, B_HEIGHT));
+        super(x, y, new Rectangle(x - xOffsetCenter, y, BUTTON_I.width, BUTTON_I.height));
         this.rowIndex = rowIndex;
         this.state = state;
         loadImages();
@@ -37,13 +33,16 @@ public class MenuButton extends Button {
         images = new BufferedImage[3];
         BufferedImage temp = getSpriteAtlas(Image.MENU_BUTTONS);
         for (int i = 0; i < images.length; i++) {
-            images[i] = temp.getSubimage(i * B_WIDTH_DEFAULT, rowIndex * B_HEIGHT_DEFAULT, B_WIDTH_DEFAULT, B_HEIGHT_DEFAULT);
+            images[i] = temp.getSubimage(i * BUTTON_I.defaultWidth, rowIndex * BUTTON_I.defaultHeight,
+                    BUTTON_I.defaultWidth, BUTTON_I.defaultHeight);
         }
     }
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.drawImage(images[index], x - xOffsetCenter, y, B_WIDTH, B_HEIGHT, null);
+        graphics.drawImage(images[index],
+                x - xOffsetCenter, y,
+                BUTTON_I.width, BUTTON_I.height, null);
     }
 
     @Override
@@ -59,9 +58,5 @@ public class MenuButton extends Button {
 
     public Rectangle getBounds() {
         return bounds;
-    }
-
-    public void setState(GameState state) {
-        this.state = state;
     }
 }

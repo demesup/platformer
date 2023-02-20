@@ -1,4 +1,4 @@
-package org.example.constant;
+package org.example.utils.constant;
 
 public enum Direction {
     LEFT,

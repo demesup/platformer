@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 
 public abstract class Entity implements Updatable, Drawable {
     protected float x, y;
+    protected int animationTick, animationIndex, animationSpeed;
     protected int width, height;
     protected Rectangle2D.Float hitBox;
 
@@ -34,5 +35,11 @@ public abstract class Entity implements Updatable, Drawable {
 
     public Rectangle2D.Float getHitBox() {
         return hitBox;
+    }
+
+     protected abstract void updateAnimationTick();
+
+    public int getAnimationIndex() {
+        return animationIndex;
     }
 }

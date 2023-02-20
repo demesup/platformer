@@ -1,21 +1,20 @@
 package org.example.entity;
 
-import org.example.constant.PlayerAction;
+import org.example.utils.constant.PlayerState;
 import org.example.main.Game;
-import org.example.utils.Image;
+import org.example.utils.constant.Image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static org.example.utils.LoadSafe.getSpriteAtlas;
-import static org.example.constant.PlayerAction.*;
+import static org.example.utils.constant.PlayerState.*;
 import static org.example.utils.Utils.*;
 import static org.example.main.Game.SCALE;
 
 public class Player extends Entity {
     private BufferedImage[][] animations;
-    private int aniTick, aniIndex, aniSpeed = 25;
-    private PlayerAction playerAction = IDLE;
+    private PlayerState playerState = IDLE;
     private boolean moving = false, attacking = false;
     private boolean left, up, right, down, jump;
     private final float playerSpeed = SCALE;
@@ -34,7 +33,7 @@ public class Player extends Entity {
         super(x, y, width, height);
         loadAnimations();
         initHitBox(x, y, (int) (20 * SCALE), (int) (27 * SCALE));
-
+        animationSpeed = 25;
     }
 
     @Override
@@ -45,18 +44,22 @@ public class Player extends Entity {
     }
 
     @Override
-    public void draw(Graphics g) {
-        g.drawImage(animations[playerAction.ordinal()][aniIndex], (int) (hitBox.x - xDrawOffset), (int) (hitBox.y - yDrawOffset), width, height, null);
+    public void draw(Graphics g, int xLevelOffset) {
+        g.drawImage(animations[playerState.ordinal()][animationIndex],
+                (int) (hitBox.x - xDrawOffset) - xLevelOffset,
+                (int) (hitBox.y - yDrawOffset),
+                width, height, null);
 //        drawHitBox(g);
     }
 
-    private void updateAnimationTick() {
-        aniTick++;
-        if (aniTick >= aniSpeed) {
-            aniTick = 0;
-            aniIndex++;
-            if (aniIndex >= playerAction.getSpriteAmount()) {
-                aniIndex = 0;
+    @Override
+    protected void updateAnimationTick() {
+        animationTick++;
+        if (animationTick >= animationSpeed) {
+            animationTick = 0;
+            animationIndex++;
+            if (animationIndex >= playerState.getSpriteAmount()) {
+                animationIndex = 0;
                 attacking = false;
             }
 
@@ -65,29 +68,29 @@ public class Player extends Entity {
     }
 
     private void setAnimation() {
-        PlayerAction startAni = playerAction;
+        PlayerState startAni = playerState;
 
         if (moving)
-            playerAction = RUN;
+            playerState = RUN;
         else
-            playerAction = IDLE;
+            playerState = IDLE;
 
         if (inAir) {
             if (airSpeed < 0) {
-                playerAction = JUMP;
-            } else playerAction = FALL;
+                playerState = JUMP;
+            } else playerState = FALL;
         }
 
         if (attacking)
-            playerAction = ATTACK_1;
+            playerState = ATTACK_1;
 
-        if (startAni != playerAction)
+        if (startAni != playerState)
             resetAniTick();
     }
 
     private void resetAniTick() {
-        aniTick = 0;
-        aniIndex = 0;
+        animationTick = 0;
+        animationIndex = 0;
     }
 
     private void updatePos() {
@@ -96,8 +99,11 @@ public class Player extends Entity {
             jump();
         }
 
-        if (!left && !right && !inAir)
-            return;
+        if (!inAir) {
+            if ((!left && !right) || (right && left)) {
+                return;
+            }
+        }
 
         float xSpeed = 0;
 

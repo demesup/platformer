@@ -4,7 +4,7 @@ import org.example.main.Game;
 
 import java.awt.geom.Rectangle2D;
 
-import static org.example.main.Game.*;
+import static org.example.utils.constant.ItemInfo.TILES_I;
 
 public class Utils {
     public static boolean canMoveHere(float x, float y, float width, float height, int[][] levelData) {
@@ -15,13 +15,14 @@ public class Utils {
     }
 
     private static boolean isSolid(float x, float y, int[][] levelData) {
-        if (x < 0 || x >= Game.GAME_WIDTH)
+        int maxWidth = levelData[0].length * TILES_I.size;
+        if (x < 0 || x >= maxWidth)
             return true;
         if (y < 0 || y >= Game.GAME_HEIGHT)
             return true;
 
-        float xIndex = x / Game.TILES_SIZE;
-        float yIndex = y / Game.TILES_SIZE;
+        float xIndex = x / TILES_I.size;
+        float yIndex = y / TILES_I.size;
 
         int value = levelData[(int) yIndex][(int) xIndex];
 
@@ -29,32 +30,30 @@ public class Utils {
     }
 
     public static float getEntityXPositionNextToWall(Rectangle2D.Float hitBox, float xSpeed) {
-        int currentTile = (int) (hitBox.x / TILES_SIZE);
+        int currentTile = (int) (hitBox.x / TILES_I.size);
         if (xSpeed > 0) {
-            int tileXPosition = currentTile * TILES_SIZE;
-            int xOffset = (int) (TILES_SIZE - hitBox.width);
+            int tileXPosition = currentTile * TILES_I.size;
+            int xOffset = (int) (TILES_I.size - hitBox.width);
             return tileXPosition + xOffset - 1;
         } else {
-            return currentTile * TILES_SIZE;
+            return currentTile * TILES_I.size;
         }
     }
 
     public static float getEntityYPositionUnderRoofOrAboveFloor(Rectangle2D.Float hitBox, float airSpeed) {
-        int currentTile = (int) (hitBox.y / TILES_SIZE);
+        int currentTile = (int) (hitBox.y / TILES_I.size);
         if (airSpeed > 0) {
-            int tileYPosition = currentTile * TILES_SIZE;
-            int yOffset = (int) (TILES_SIZE - hitBox.height);
+            int tileYPosition = currentTile * TILES_I.size;
+            int yOffset = (int) (TILES_I.size - hitBox.height);
             return tileYPosition + yOffset - 1;
         } else {
-            return currentTile * TILES_SIZE;
+            return currentTile * TILES_I.size;
         }
     }
 
     public static boolean isEntityOnFloor(Rectangle2D.Float hitBox, int[][] levelData) {
         if (!isSolid(hitBox.x, hitBox.y + hitBox.height + 1, levelData)) {
-            if (!isSolid(hitBox.x + hitBox.width, hitBox.y + hitBox.height + 1, levelData)) {
-                return false;
-            }
+            return isSolid(hitBox.x + hitBox.width, hitBox.y + hitBox.height + 1, levelData);
         }
         return true;
     }

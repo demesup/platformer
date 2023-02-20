@@ -1,33 +1,34 @@
-package org.example.gamestates;
+package org.example.gamestate;
 
 import org.example.button.Button;
 import org.example.button.MenuButton;
-import org.example.utils.Image;
+import org.example.utils.constant.Image;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import static org.example.gamestates.GameState.*;
-import static org.example.main.Game.GAME_WIDTH;
-import static org.example.main.Game.SCALE;
+import static org.example.gamestate.GameState.*;
+import static org.example.main.Game.*;
 import static org.example.main.Main.game;
 import static org.example.utils.LoadSafe.getSpriteAtlas;
 
 public class Menu extends State {
-    private BufferedImage backgroundImage;
+    private BufferedImage plateImage;
+    private final BufferedImage backgroundImage;
     private int menuX, menuY, menuWidth, menuHeight;
 
     public Menu() {
         loadButtons();
-        loadBackground();
+        loadPlate();
+        backgroundImage = getSpriteAtlas(Image.BACKGROUND_MENU);
     }
 
-    private void loadBackground() {
-        backgroundImage = getSpriteAtlas(Image.MENU_BACKGROUND);
-        menuWidth = (int) (backgroundImage.getWidth() * SCALE);
-        menuHeight = (int) (backgroundImage.getHeight() * SCALE);
+    private void loadPlate() {
+        plateImage = getSpriteAtlas(Image.MENU_PLATE);
+        menuWidth = (int) (plateImage.getWidth() * SCALE);
+        menuHeight = (int) (plateImage.getHeight() * SCALE);
         menuX = GAME_WIDTH / 2 - menuWidth / 2;
         menuY = (int) (45 * SCALE);
     }
@@ -48,7 +49,8 @@ public class Menu extends State {
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.drawImage(backgroundImage, menuX, menuY, menuWidth, menuHeight, null);
+        graphics.drawImage(backgroundImage, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+        graphics.drawImage(plateImage, menuX, menuY, menuWidth, menuHeight, null);
         for (Button button : buttons) {
             button.draw(graphics);
         }

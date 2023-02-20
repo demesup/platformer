@@ -1,4 +1,4 @@
-package org.example.gamestates;
+package org.example.gamestate;
 
 import java.awt.event.MouseEvent;
 

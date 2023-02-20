@@ -1,6 +1,6 @@
 package org.example.button;
 
-import org.example.utils.Image;
+import org.example.utils.constant.Image;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

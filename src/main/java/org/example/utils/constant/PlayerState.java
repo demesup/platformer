@@ -1,6 +1,6 @@
-package org.example.constant;
+package org.example.utils.constant;
 
-public enum PlayerAction {
+public enum PlayerState {
     IDLE(5),
     RUN(6),
     JUMP(3),
@@ -13,7 +13,7 @@ public enum PlayerAction {
 
     final int spriteAmount;
 
-    PlayerAction(int spriteAmount) {
+    PlayerState(int spriteAmount) {
         this.spriteAmount = spriteAmount;
     }
 

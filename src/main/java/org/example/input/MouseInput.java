@@ -6,8 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import static org.example.gamestates.GameState.PAUSE;
-import static org.example.gamestates.GameState.overlayState;
+import static org.example.gamestate.GameState.PAUSE;
+import static org.example.gamestate.GameState.overlayState;
 
 public class
 
