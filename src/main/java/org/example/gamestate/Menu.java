@@ -1,7 +1,7 @@
 package org.example.gamestate;
 
-import org.example.button.Button;
-import org.example.button.MenuButton;
+import org.example.bar.button.Button;
+import org.example.bar.button.MenuButton;
 import org.example.utils.constant.Image;
 
 import java.awt.*;

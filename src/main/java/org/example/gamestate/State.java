@@ -2,7 +2,7 @@ package org.example.gamestate;
 
 import org.example.Drawable;
 import org.example.Updatable;
-import org.example.button.Button;
+import org.example.bar.button.Button;
 
 import java.awt.event.MouseEvent;
 

@@ -1,4 +1,4 @@
-package org.example.button;
+package org.example.bar.button;
 
 import java.awt.*;
 

@@ -74,7 +74,7 @@ public class Playing extends State {
         if (!paused) {
             levelHandler.update();
             player.update();
-            enemyHandler.update();
+            enemyHandler.update(levelHandler.getCurrentLevel().levelData(), player);
             checkCloseToBorder();
         } else PAUSE.getState().update();
     }

@@ -15,7 +15,8 @@ public enum Image {
     VOLUME_BUTTONS("volume_buttons.png"),
     PLAYING_BACKGROUND("playing_bg_img.png"),
     BIG_CLOUDS("big_clouds.png"),
-    SMALL_CLOUDS("small_clouds.png");
+    SMALL_CLOUDS("small_clouds.png"),
+    BAR("health_power_bar.png");
 
     private final String path;
 

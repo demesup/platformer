@@ -1,7 +1,9 @@
 package org.example.entity;
 
+import org.example.bar.Bar;
+import org.example.bar.HealthBar;
+import org.example.bar.button.StatusBar;
 import org.example.utils.constant.PlayerState;
-import org.example.main.Game;
 import org.example.utils.constant.Image;
 
 import java.awt.*;
@@ -11,45 +13,89 @@ import static org.example.utils.LoadSafe.getSpriteAtlas;
 import static org.example.utils.constant.PlayerState.*;
 import static org.example.utils.Utils.*;
 import static org.example.main.Game.SCALE;
+import static org.example.utils.constant.SpriteDrawOffset.PLAYER_O;
 
 public class Player extends Entity {
     private BufferedImage[][] animations;
     private PlayerState playerState = IDLE;
     private boolean moving = false, attacking = false;
     private boolean left, up, right, down, jump;
-    private final float playerSpeed = SCALE;
     private int[][] levelData;
-    private final float xDrawOffset = 21 * Game.SCALE;
-    private final float yDrawOffset = 4 * Game.SCALE;
 
     private float airSpeed = 0f;
-    private float gravity = 0.04f * SCALE;
-    private float jumpSpeed = -2.25f * SCALE;
-    private float failSpeedAfterCollision = 0.5f * SCALE;
-    private boolean inAir = false;
-
+    private final float jumpSpeed = -2.25f * SCALE;
+    private HealthBar healthBar;
+    private StatusBar statusBar;
+    private final int maxHealth;
+    private int currentHealth;
+    private int healthWidth;
 
     public Player(float x, float y, int width, int height) {
-        super(x, y, width, height);
+        super(x, y, width, height, SCALE);
         loadAnimations();
         initHitBox(x, y, (int) (20 * SCALE), (int) (27 * SCALE));
+        initAttackBox(x, y, (int) (20 * SCALE), (int) (20 * SCALE));
         animationSpeed = 25;
+        healthBar = new HealthBar();
+        statusBar = new StatusBar();
+        maxHealth = 100;
+        currentHealth = maxHealth;
+        healthWidth = healthBar.width;
     }
 
     @Override
     public void update() {
+        updateHealthBar();
+        updateAttackBox();
         updatePos();
         updateAnimationTick();
         setAnimation();
     }
 
     @Override
-    public void draw(Graphics g, int xLevelOffset) {
-        g.drawImage(animations[playerState.ordinal()][animationIndex],
-                (int) (hitBox.x - xDrawOffset) - xLevelOffset,
-                (int) (hitBox.y - yDrawOffset),
+    protected void updateAttackBox() {
+        if (right) {
+            attackBox.x = hitBox.x + hitBox.width + (int) (SCALE * 10);
+        } else if (left) {
+            attackBox.x = hitBox.x - hitBox.width - (int) (SCALE * 10);
+        }
+        attackBox.y = hitBox.y + (int) (SCALE * 10);
+    }
+
+    private void updateHealthBar() {
+        healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBar.width);
+    }
+
+    @Override
+    public void draw(Graphics graphics, int xLevelOffset) {
+        graphics.drawImage(animations[playerState.ordinal()][animationIndex],
+                (int) (hitBox.x - PLAYER_O.xOffset) - xLevelOffset,
+                (int) (hitBox.y - PLAYER_O.yOffset),
                 width, height, null);
-//        drawHitBox(g);
+//        drawHitBox(graphics);
+        drawBar(graphics);
+        drawAttackBox(graphics, xLevelOffset);
+    }
+
+    private void drawAttackBox(Graphics graphics, int xLevelOffset) {
+        graphics.setColor(Color.RED);
+        graphics.drawRect(
+                (int) attackBox.x - xLevelOffset,
+                (int) attackBox.y,
+                (int) attackBox.width,
+                (int) attackBox.height
+        );
+    }
+
+    private void drawBar(Graphics graphics) {
+        graphics.drawImage(Bar.image, statusBar.x, statusBar.y, statusBar.width, statusBar.height, null);
+        graphics.setColor(Color.RED);
+        graphics.fillRect(
+                healthBar.x + statusBar.x,
+                healthBar.y + statusBar.y,
+                healthBar.width,
+                healthBar.height
+        );
     }
 
     @Override
@@ -82,7 +128,7 @@ public class Player extends Entity {
         }
 
         if (attacking)
-            playerState = ATTACK_1;
+            playerState = ATTACK;
 
         if (startAni != playerState)
             resetAniTick();
@@ -108,10 +154,10 @@ public class Player extends Entity {
         float xSpeed = 0;
 
         if (left) {
-            xSpeed -= playerSpeed;
+            xSpeed -= speed;
         }
         if (right) {
-            xSpeed += playerSpeed;
+            xSpeed += speed;
         }
         if (!inAir) {
             if (!isEntityOnFloor(hitBox, levelData)) {
@@ -129,7 +175,7 @@ public class Player extends Entity {
                 if (airSpeed > 0) {
                     resetInAir();
                 } else {
-                    airSpeed = failSpeedAfterCollision;
+                    airSpeed = fallSpeed;
                 }
                 updateXPosition(xSpeed);
             }
@@ -158,15 +204,25 @@ public class Player extends Entity {
         }
     }
 
-    private void loadAnimations() {
+    public void changeX(int value) {
+        currentHealth += value;
+        if (currentHealth <= 0) {
+            currentHealth = 0;
+            //gameOver();
+        } else if (currentHealth >= maxHealth) {
+            currentHealth = maxHealth;
+        }
+    }
 
+    private void loadAnimations() {
         BufferedImage img = getSpriteAtlas(Image.PLAYER);
 
-        animations = new BufferedImage[9][6];
-        for (int j = 0; j < animations.length; j++)
-            for (int i = 0; i < animations[j].length; i++)
+        animations = new BufferedImage[7][8];
+        for (int j = 0; j < animations.length; j++) {
+            for (int i = 0; i < animations[j].length; i++) {
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
-
+            }
+        }
     }
 
     public void loadLevelData(int[][] levelData) {
@@ -187,32 +243,18 @@ public class Player extends Entity {
         this.attacking = attacking;
     }
 
-    public boolean isLeft() {
-        return left;
-    }
 
     public void setLeft(boolean left) {
         this.left = left;
-    }
-
-    public boolean isUp() {
-        return up;
     }
 
     public void setUp(boolean up) {
         this.up = up;
     }
 
-    public boolean isRight() {
-        return right;
-    }
 
     public void setRight(boolean right) {
         this.right = right;
-    }
-
-    public boolean isDown() {
-        return down;
     }
 
     public void setDown(boolean down) {

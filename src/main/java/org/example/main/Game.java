@@ -9,7 +9,7 @@ import static org.example.utils.constant.ItemInfo.TILES_I;
 public class Game {
     private final GamePanel gamePanel;
     private GameState state;
-    public static final float SCALE = 1.5F;
+    public static final float SCALE = 1.0F;
       public static final int GAME_WIDTH = TILES_I.size * TILES_I.defaultWidth;
     public static final int GAME_HEIGHT = TILES_I.size * TILES_I.defaultHeight;
 

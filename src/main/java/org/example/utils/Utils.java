@@ -3,6 +3,7 @@ package org.example.utils;
 import org.example.main.Game;
 
 import java.awt.geom.Rectangle2D;
+import java.util.stream.IntStream;
 
 import static org.example.utils.constant.ItemInfo.TILES_I;
 
@@ -14,18 +15,26 @@ public class Utils {
         return !isSolid(x, y + height, levelData);
     }
 
+    public static boolean canMoveHere(Rectangle2D.Float hitBox, int[][] levelData) {
+        return canMoveHere(hitBox.x, hitBox.y, hitBox.width, hitBox.height, levelData);
+    }
+
     private static boolean isSolid(float x, float y, int[][] levelData) {
-        int maxWidth = levelData[0].length * TILES_I.size;
-        if (x < 0 || x >= maxWidth)
-            return true;
-        if (y < 0 || y >= Game.GAME_HEIGHT)
-            return true;
+        if (isInGameWindow(x, y, levelData)) return true;
 
         float xIndex = x / TILES_I.size;
         float yIndex = y / TILES_I.size;
 
-        int value = levelData[(int) yIndex][(int) xIndex];
+        return isTileSolid((int) xIndex, (int) yIndex, levelData);
+    }
 
+    private static boolean isInGameWindow(float x, float y, int[][] levelData) {
+        int maxWidth = levelData[0].length * TILES_I.size;
+        return x < 0 || x >= maxWidth || y < 0 || y >= Game.GAME_HEIGHT;
+    }
+
+    private static boolean isTileSolid(int x, int y, int[][] levelData) {
+        int value = levelData[y][x];
         return value != 11;
     }
 
@@ -56,5 +65,21 @@ public class Utils {
             return isSolid(hitBox.x + hitBox.width, hitBox.y + hitBox.height + 1, levelData);
         }
         return true;
+    }
+
+    public static boolean isFloor(Rectangle2D.Float hitBox, float xSpeed, int[][] levelData) {
+        return isSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, levelData);
+    }
+
+    public static boolean isSightClear(Rectangle2D.Float hitBox1, Rectangle2D.Float hitBox2, int tileY, int[][] levelData) {
+        int firstXTile = (int) (hitBox1.x / TILES_I.size);
+        int secondXTile = (int) (hitBox2.x / TILES_I.size);
+        IntStream stream = (firstXTile > secondXTile) ? IntStream.range(secondXTile, firstXTile) :
+                IntStream.range(firstXTile, secondXTile);
+        return allTilesWalkable(stream, tileY, levelData);
+    }
+
+    public static boolean allTilesWalkable(IntStream stream, int y, int[][] levelData) {
+        return !stream.anyMatch(x -> isSolid(x, y, levelData) && !isTileSolid(x, y + 1, levelData));
     }
 }

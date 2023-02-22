@@ -1,5 +1,13 @@
 package org.example;
 
+import org.example.entity.Player;
+
 public interface Updatable {
-    void update();
+    default void update() {
+    }
+
+    default void update(int[][] levelData) {
+    }
+
+    default void update(int[][] levelData, Player player){}
 }

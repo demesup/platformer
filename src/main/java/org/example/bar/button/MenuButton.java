@@ -1,4 +1,4 @@
-package org.example.button;
+package org.example.bar.button;
 
 import org.example.gamestate.GameState;
 import org.example.utils.constant.Image;

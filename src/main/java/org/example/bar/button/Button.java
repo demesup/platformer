@@ -1,4 +1,4 @@
-package org.example.button;
+package org.example.bar.button;
 
 import org.example.Drawable;
 import org.example.Updatable;

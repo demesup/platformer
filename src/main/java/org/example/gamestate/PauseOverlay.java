@@ -1,16 +1,16 @@
 package org.example.gamestate;
 
 import org.example.Updatable;
-import org.example.button.*;
-import org.example.button.Button;
+import org.example.bar.button.*;
+import org.example.bar.button.Button;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static org.example.button.SoundButton.SOUND_SIZE;
-import static org.example.button.UrmButton.URM_SIZE;
+import static org.example.bar.button.SoundButton.SOUND_SIZE;
+import static org.example.bar.button.UrmButton.URM_SIZE;
 import static org.example.main.Game.GAME_WIDTH;
 import static org.example.main.Game.SCALE;
 import static org.example.main.Main.game;

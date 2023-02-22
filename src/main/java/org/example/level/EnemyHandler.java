@@ -3,6 +3,7 @@ package org.example.level;
 import org.example.Drawable;
 import org.example.Updatable;
 import org.example.entity.Crabby;
+import org.example.entity.Player;
 import org.example.utils.LoadSafe;
 import org.example.utils.constant.Image;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 import static org.example.utils.LoadSafe.getCrabs;
 import static org.example.utils.constant.ItemInfo.CRABBY_I;
+import static org.example.utils.constant.SpriteDrawOffset.CRABBY_O;
 
 public class EnemyHandler implements Updatable, Drawable {
     private BufferedImage[][] crabbyImages;
@@ -38,8 +40,8 @@ public class EnemyHandler implements Updatable, Drawable {
     }
 
     @Override
-    public void update() {
-        crabbies.forEach(Crabby::update);
+    public void update(int[][] levelData, Player player) {
+        crabbies.forEach(c-> c.update(levelData, player));
     }
 
     @Override
@@ -48,14 +50,12 @@ public class EnemyHandler implements Updatable, Drawable {
     }
 
     private void drawCrabs(Graphics graphics, int xLevelOffset) {
-        crabbies.forEach(c -> {
-            graphics.drawImage(
-                    crabbyImages[c.getEnemyState().ordinal()][c.getAnimationIndex()],
-                    (int) c.getHitBox().x - xLevelOffset,
-                    (int) c.getHitBox().y,
-                    CRABBY_I.width, CRABBY_I.height,
-                    null
-            );
-        });
+        crabbies.forEach(c -> graphics.drawImage(
+                crabbyImages[c.getState().ordinal()][c.getAnimationIndex()],
+                (int) c.getHitBox().x - xLevelOffset,
+                (int) c.getHitBox().y- CRABBY_O.yOffset,
+                CRABBY_I.width, CRABBY_I.height,
+                null
+        ));
     }
 }
