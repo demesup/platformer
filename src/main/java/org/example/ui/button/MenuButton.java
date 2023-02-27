@@ -1,6 +1,6 @@
-package org.example.bar.button;
+package org.example.ui.button;
 
-import org.example.gamestate.GameState;
+import org.example.ui.gamestate.GameState;
 import org.example.utils.constant.Image;
 
 import java.awt.*;

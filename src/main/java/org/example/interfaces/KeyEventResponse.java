@@ -1,4 +1,4 @@
-package org.example.gamestate;
+package org.example.interfaces;
 
 import java.awt.event.KeyEvent;
 

@@ -1,4 +1,4 @@
-package org.example.bar.button;
+package org.example.ui.button;
 
 import org.example.utils.constant.Image;
 

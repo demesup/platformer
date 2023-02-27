@@ -1,22 +1,23 @@
 package org.example.level;
 
-import org.example.Drawable;
-import org.example.Updatable;
+import org.example.entity.Enemy;
+import org.example.interfaces.Drawable;
+import org.example.interfaces.Updatable;
 import org.example.entity.Crabby;
 import org.example.entity.Player;
 import org.example.utils.LoadSafe;
 import org.example.utils.constant.Image;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static org.example.utils.LoadSafe.getCrabs;
 import static org.example.utils.constant.ItemInfo.CRABBY_I;
-import static org.example.utils.constant.SpriteDrawOffset.CRABBY_O;
 
 public class EnemyHandler implements Updatable, Drawable {
-    private BufferedImage[][] crabbyImages;
+    public static BufferedImage[][] crabbyImages;
     private ArrayList<Crabby> crabbies = new ArrayList<>();
 
     public EnemyHandler() {
@@ -41,7 +42,7 @@ public class EnemyHandler implements Updatable, Drawable {
 
     @Override
     public void update(int[][] levelData, Player player) {
-        crabbies.forEach(c-> c.update(levelData, player));
+        crabbies.stream().filter(Enemy::isActive).forEach(c -> c.update(levelData, player));
     }
 
     @Override
@@ -50,12 +51,14 @@ public class EnemyHandler implements Updatable, Drawable {
     }
 
     private void drawCrabs(Graphics graphics, int xLevelOffset) {
-        crabbies.forEach(c -> graphics.drawImage(
-                crabbyImages[c.getState().ordinal()][c.getAnimationIndex()],
-                (int) c.getHitBox().x - xLevelOffset,
-                (int) c.getHitBox().y- CRABBY_O.yOffset,
-                CRABBY_I.width, CRABBY_I.height,
-                null
-        ));
+        crabbies.stream().filter(Enemy::isActive).forEach(c -> c.draw(graphics, xLevelOffset));
+    }
+
+    public void checkEnemyHit(Rectangle2D.Float attackBox) {
+        crabbies.forEach(c -> {
+            if (attackBox.intersects(c.getHitBox())) {
+                c.receivedDamage(10);
+            }
+        });
     }
 }

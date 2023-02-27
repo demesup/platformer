@@ -1,23 +1,29 @@
 package org.example.entity;
 
+import org.example.utils.constant.Direction;
 import org.example.utils.constant.EnemyState;
 import org.example.utils.constant.EnemyType;
 
+import java.awt.*;
+
+import static org.example.level.EnemyHandler.crabbyImages;
 import static org.example.main.Game.SCALE;
 import static org.example.utils.constant.EnemyState.ATTACK;
 import static org.example.utils.constant.EnemyState.RUN;
 import static org.example.utils.constant.ItemInfo.CRABBY_I;
+import static org.example.utils.constant.SpriteDrawOffset.CRABBY_O;
 
 public class Crabby extends Enemy {
+
     public Crabby(float x, float y) {
-        super(x, y, CRABBY_I.width, CRABBY_I.height, EnemyType.CRABBY);
+        super(x, y, CRABBY_I.width, CRABBY_I.height, 30, EnemyType.CRABBY);
         initHitBox(x, y, (int) (22 * SCALE), (int) (19 * SCALE));
+        initAttackBox(x, y, (int) (82 * SCALE), (int) (19 * SCALE));
         enemyState = EnemyState.IDLE;
     }
 
-
     @Override
-    public void updateMove(int[][] levelData, Player player) {
+    public void updateBehavior(int[][] levelData, Player player) {
         isFirstUpdate(levelData);
 
         if (inAir) {
@@ -34,9 +40,42 @@ public class Crabby extends Enemy {
                     }
                     move(levelData);
                 }
+                case ATTACK -> {
+                    if (animationIndex == 0) attackChecked = false;
+                    if (animationIndex == 3 && !attackChecked) {
+                        checkAttack(attackBox, player);
+                    }
+                }
+                case HIT -> {
+                }
             }
         }
-
     }
 
+    public int flipX() {
+        return direction == Direction.RIGHT ? width : 0;
+    }
+
+    public int flipW() {
+        return direction == Direction.RIGHT ? -1 : 1;
+    }
+
+    @Override
+    public void draw(Graphics graphics, int xLevelOffset) {
+        graphics.drawImage(
+                crabbyImages[enemyState.ordinal()][animationIndex],
+                (int) hitBox.x - xLevelOffset - CRABBY_O.xOffset + flipX(),
+                (int) hitBox.y - CRABBY_O.yOffset,
+                CRABBY_I.width * flipW(), CRABBY_I.height,
+                null
+        );
+        drawAttackBox(graphics, xLevelOffset);
+        drawHitBox(graphics, xLevelOffset);
+    }
+
+    @Override
+    protected void updateAttackBox() {
+        attackBox.x = hitBox.x - attackBoxOffsetX - 1;
+        attackBox.y = hitBox.y;
+    }
 }

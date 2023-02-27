@@ -1,7 +1,7 @@
-package org.example.gamestate;
+package org.example.ui.gamestate;
 
-import org.example.bar.button.Button;
-import org.example.bar.button.MenuButton;
+import org.example.ui.button.Button;
+import org.example.ui.button.MenuButton;
 import org.example.utils.constant.Image;
 
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import static org.example.gamestate.GameState.*;
+import static org.example.ui.gamestate.GameState.*;
 import static org.example.main.Game.*;
 import static org.example.main.Main.game;
 import static org.example.utils.LoadSafe.getSpriteAtlas;

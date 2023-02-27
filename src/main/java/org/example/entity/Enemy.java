@@ -4,10 +4,13 @@ import org.example.utils.constant.Direction;
 import org.example.utils.constant.EnemyState;
 import org.example.utils.constant.EnemyType;
 
+import java.awt.geom.Rectangle2D;
+
 import static org.example.main.Game.SCALE;
 import static org.example.utils.Utils.*;
 import static org.example.utils.constant.Direction.LEFT;
 import static org.example.utils.constant.Direction.RIGHT;
+import static org.example.utils.constant.EntityInfo.CRABBY_E_I;
 import static org.example.utils.constant.ItemInfo.TILES_I;
 
 public abstract class Enemy extends Entity {
@@ -19,9 +22,11 @@ public abstract class Enemy extends Entity {
     protected int tileY;
     protected float attackDistance = TILES_I.size;
     protected float sightDistance = attackDistance * 5;
+    protected boolean active = true;
 
-    public Enemy(float x, float y, int width, int height, EnemyType enemyType) {
-        super(x, y, width, height, 0.3f * SCALE);
+    public Enemy(float x, float y, int width, int height,
+                 int attackBoxOffsetX, EnemyType enemyType) {
+        super(x, y, width, height, 0.3f * SCALE, attackBoxOffsetX);
         this.enemyType = enemyType;
         this.animationSpeed = 25;
         this.direction = RIGHT;
@@ -36,18 +41,22 @@ public abstract class Enemy extends Entity {
             animationIndex++;
             if (animationIndex >= enemyType.getSpriteAmount(enemyState)) {
                 animationIndex = 0;
-                if (enemyState == EnemyState.ATTACK) enemyState = EnemyState.IDLE;
+                switch (enemyState) {
+                    case ATTACK, HIT -> enemyState = EnemyState.IDLE;
+                    case DEAD -> active = false;
+                }
             }
         }
     }
 
     @Override
     public void update(int[][] levelData, Player player) {
-        updateMove(levelData, player);
+        updateBehavior(levelData, player);
         updateAnimationTick();
+        updateAttackBox();
     }
 
-    public abstract void updateMove(int[][] levelData, Player player);
+    public abstract void updateBehavior(int[][] levelData, Player player);
 
     protected void changeDirection() {
         direction = (direction == LEFT) ? RIGHT : LEFT;
@@ -90,7 +99,12 @@ public abstract class Enemy extends Entity {
 
     private boolean checkY(Player player) {
         int playerTileY = (int) (player.getHitBox().y / TILES_I.size);
-        return playerTileY == tileY || playerTileY - 2 == tileY;
+        return playerTileY == tileY;
+    }
+
+    public void receivedDamage(int value) {
+        currentHealth -= value;
+        setState(currentHealth <= 0 ? EnemyState.DEAD : EnemyState.HIT);
     }
 
     protected void turnToPlayer(Player player) {
@@ -98,13 +112,21 @@ public abstract class Enemy extends Entity {
     }
 
     protected boolean isPlayerInSightRange(Player player) {
+        if (!checkY(player)) return false;
         int absValue = (int) Math.abs(player.hitBox.x - this.hitBox.x);
         return absValue <= sightDistance;
     }
 
     protected boolean isPlayerInAttackRange(Player player) {
-        int absValue = (int) Math.abs(player.hitBox.x - this.hitBox.x - hitBox.width);
-        return absValue < attackDistance;
+        int absValue = (int) Math.abs(player.hitBox.x - this.hitBox.x);
+        return absValue <= attackDistance;
+    }
+
+
+    protected void checkAttack(Rectangle2D.Float attackBox, Player player) {
+        if (attackBox.intersects(player.hitBox))
+            player.changeHealth(-CRABBY_E_I.damage);
+        attackChecked = true;
     }
 
     public void setState(EnemyState enemyState) {
@@ -121,4 +143,7 @@ public abstract class Enemy extends Entity {
         return enemyType;
     }
 
+    public boolean isActive() {
+        return active;
+    }
 }

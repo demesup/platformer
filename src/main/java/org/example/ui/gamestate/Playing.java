@@ -1,4 +1,4 @@
-package org.example.gamestate;
+package org.example.ui.gamestate;
 
 import org.example.entity.Player;
 import org.example.level.EnemyHandler;
@@ -9,11 +9,10 @@ import org.example.utils.LoadSafe;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import static org.example.gamestate.GameState.PAUSE;
-import static org.example.gamestate.GameState.overlayState;
 import static org.example.main.Game.*;
 import static org.example.main.Main.game;
 import static org.example.utils.constant.ItemInfo.*;
@@ -23,6 +22,7 @@ public class Playing extends State {
     private EnemyHandler enemyHandler;
     private Player player;
     private boolean paused = false;
+    private boolean gameOver = false;
 
     private int xLvlOffset;
     private final int leftBorder = (int) (0.2 * GAME_WIDTH);
@@ -76,7 +76,12 @@ public class Playing extends State {
             player.update();
             enemyHandler.update(levelHandler.getCurrentLevel().levelData(), player);
             checkCloseToBorder();
-        } else PAUSE.getState().update();
+        } else GameState.PAUSE.getState().update();
+    }
+
+    @Override
+    public void checkEnemyHit(Rectangle2D.Float attackBox) {
+        enemyHandler.checkEnemyHit(attackBox);
     }
 
     private void checkCloseToBorder() {
@@ -106,7 +111,7 @@ public class Playing extends State {
         if (paused) {
             graphics.setColor(new Color(0, 0, 0, 150));
             graphics.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            PAUSE.getState().draw(graphics);
+            GameState.PAUSE.getState().draw(graphics);
         }
     }
 
@@ -135,21 +140,21 @@ public class Playing extends State {
     @Override
     public void mousePressed(MouseEvent e) {
         if (paused) {
-            PAUSE.getState().mousePressed(e);
+            GameState.PAUSE.getState().mousePressed(e);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         if (paused) {
-            PAUSE.getState().mouseReleased(e);
+            GameState.PAUSE.getState().mouseReleased(e);
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         if (paused) {
-            PAUSE.getState().mouseMoved(e);
+            GameState.PAUSE.getState().mouseMoved(e);
         }
     }
 
@@ -165,7 +170,7 @@ public class Playing extends State {
             case KeyEvent.VK_BACK_SPACE -> game.setState(GameState.MENU);
             case KeyEvent.VK_ESCAPE -> {
                 paused = !paused;
-                overlayState = PAUSE;
+                GameState.overlayState = GameState.PAUSE;
             }
         }
     }
@@ -183,6 +188,14 @@ public class Playing extends State {
 
     public void unpauseGame() {
         paused = false;
+    }
 
+    @Override
+    public void resetAll() {
+        super.resetAll();
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

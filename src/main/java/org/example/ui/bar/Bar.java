@@ -1,6 +1,6 @@
-package org.example.bar;
+package org.example.ui.bar;
 
-import org.example.Updatable;
+import org.example.interfaces.Updatable;
 import org.example.utils.LoadSafe;
 import org.example.utils.constant.Image;
 

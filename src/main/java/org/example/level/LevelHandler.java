@@ -1,6 +1,6 @@
 package org.example.level;
 
-import org.example.Drawable;
+import org.example.interfaces.Drawable;
 import org.example.utils.LoadSafe;
 import org.example.utils.constant.Image;
 

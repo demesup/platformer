@@ -1,4 +1,4 @@
-package org.example.gamestate;
+package org.example.ui.gamestate;
 
 
 public class Quit extends State {

@@ -1,7 +1,7 @@
-package org.example.bar.button;
+package org.example.ui.button;
 
-import org.example.Drawable;
-import org.example.Updatable;
+import org.example.interfaces.Drawable;
+import org.example.interfaces.Updatable;
 
 import java.awt.*;
 

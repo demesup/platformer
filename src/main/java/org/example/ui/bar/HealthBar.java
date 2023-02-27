@@ -1,4 +1,4 @@
-package org.example.bar;
+package org.example.ui.bar;
 
 public class HealthBar extends Bar{
     public HealthBar() {
