@@ -1,55 +1,43 @@
 package org.example.main;
 
-import org.example.ui.gamestate.GameState;
-
 import java.awt.*;
 
+import static org.example.ui.gamestate.GameState.GAME_STATE;
+import static org.example.ui.gamestate.GameState.OVERLAY;
 import static org.example.utils.constant.ItemInfo.TILES_I;
 
 public class Game {
-    private final GamePanel gamePanel;
-    private GameState state;
-    public static final float SCALE = 1.5F;
-      public static final int GAME_WIDTH = TILES_I.size * TILES_I.defaultWidth;
-    public static final int GAME_HEIGHT = TILES_I.size * TILES_I.defaultHeight;
+  private final GamePanel gamePanel;
+  public static final float SCALE = 1.5F;
+  public static final int GAME_WIDTH = TILES_I.size * TILES_I.defaultWidth;
+  public static final int GAME_HEIGHT = TILES_I.size * TILES_I.defaultHeight;
 
-    public Game() {
-        initClasses();
+  public Game() {
+    gamePanel = new GamePanel();
+    new GameWindow(gamePanel);
+    gamePanel.setFocusable(true);
+    gamePanel.requestFocus();
+  }
 
-        gamePanel = new GamePanel();
-        new GameWindow(gamePanel);
-        gamePanel.requestFocus();
-    }
+  public void startGameLoop() {
+    new GameThread().start();
+  }
 
-    private void initClasses() {
-        state = GameState.GAME_OVER;
-    }
+  protected void update() {
+    GAME_STATE.state.update();
+    if (OVERLAY != null) OVERLAY.state.update();
+  }
 
-    public void startGameLoop() {
-        new GameThread().start();
-    }
+  public void render(Graphics graphics) {
+    GAME_STATE.state.draw(graphics);
+    if (OVERLAY != null) OVERLAY.state.draw(graphics);
+  }
 
-    protected void update() {
-        state.getState().update();
-    }
+  public void windowFocusLost() {
+    GAME_STATE.state.windowFocusLost();
+  }
 
-    public void render(Graphics graphics) {
-        state.getState().draw(graphics);
-    }
-
-    public void windowFocusLost() {
-        state.getState().windowFocusLost();
-    }
-
-    public GameState getState() {
-        return state;
-    }
-
-    public void setState(GameState state) {
-        this.state = state;
-    }
-
-    public GamePanel getGamePanel() {
-        return gamePanel;
-    }
+  public GamePanel getGamePanel() {
+    return gamePanel;
+  }
 }

@@ -29,7 +29,7 @@ public class GameThread extends Thread {
             previousTime = currentTime;
 
             if (deltaU >= 1) {
-                game.update();
+              game.update();
                 updates++;
                 deltaU--;
             }

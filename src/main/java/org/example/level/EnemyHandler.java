@@ -2,6 +2,7 @@ package org.example.level;
 
 import org.example.entity.Enemy;
 import org.example.interfaces.Drawable;
+import org.example.interfaces.Resettable;
 import org.example.interfaces.Updatable;
 import org.example.entity.Crabby;
 import org.example.entity.Player;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import static org.example.utils.LoadSafe.getCrabs;
 import static org.example.utils.constant.ItemInfo.CRABBY_I;
 
-public class EnemyHandler implements Updatable, Drawable {
+public class EnemyHandler implements Updatable, Drawable, Resettable {
     public static BufferedImage[][] crabbyImages;
     private ArrayList<Crabby> crabbies = new ArrayList<>();
 
@@ -61,4 +62,9 @@ public class EnemyHandler implements Updatable, Drawable {
             }
         });
     }
+
+  @Override
+  public void resetAll() {
+    crabbies.forEach(Crabby::resetAll);
+  }
 }

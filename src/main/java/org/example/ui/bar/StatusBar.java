@@ -1,6 +1,4 @@
-package org.example.ui.button;
-
-import org.example.ui.bar.Bar;
+package org.example.ui.bar;
 
 public class StatusBar extends Bar {
     public StatusBar() {

@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import org.example.interfaces.Drawable;
+import org.example.interfaces.Resettable;
 import org.example.interfaces.Updatable;
 
 import java.awt.*;
@@ -8,7 +9,7 @@ import java.awt.geom.Rectangle2D;
 
 import static org.example.main.Game.SCALE;
 
-public abstract class Entity implements Updatable, Drawable {
+public abstract class Entity implements Updatable, Drawable, Resettable {
     protected float x, y;
     protected int animationTick, animationIndex, animationSpeed;
     protected int width, height;

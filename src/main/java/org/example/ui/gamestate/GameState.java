@@ -5,21 +5,26 @@ import org.example.ui.gamestate.overlay.GameOverOverlay;
 import org.example.ui.gamestate.overlay.PauseOverlay;
 
 public enum GameState {
-    PLAYING(new Playing()),
-    OPTIONS(new Options()),
-    QUIT(new Quit()),
-    MENU(new Menu()),
-    PAUSE(new PauseOverlay()),
-    GAME_OVER(new GameOverOverlay());
-    private final State state;
+  PLAYING(new Playing()),
+  OPTIONS(new Options()),
+  QUIT(new Quit()),
+  MENU(new Menu()),
+  PAUSE(new PauseOverlay()),
+  GAME_OVER(new GameOverOverlay());
+  public final State state;
 
-   public static GameState overlayState;
+  GameState(State state) {
+    this.state = state;
+  }
 
-    GameState(State state) {
-        this.state = state;
-    }
+  public static GameState GAME_STATE = GameState.MENU;
 
-    public State getState() {
-        return state;
-    }
+  public static void returnToMenu() {
+    GAME_STATE = MENU;
+    OVERLAY = null;
+    PLAYING.state.resetButtons();
+  }
+
+  public static GameState OVERLAY = null;
+
 }

@@ -28,9 +28,6 @@ public abstract class State implements MouseEventResponse, KeyEventResponse, Dra
     public void windowFocusLost() {
     }
 
-    public void resetAll() {
-    }
-
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
     }
 }
