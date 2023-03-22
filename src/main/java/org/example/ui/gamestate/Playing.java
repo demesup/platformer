@@ -23,6 +23,7 @@ public class Playing extends State {
   private Player player;
   private boolean paused = false;
   private boolean gameOver = false;
+  private boolean levelCompleted = true;
 
   private int xLvlOffset;
   private final int leftBorder = (int) (0.2 * GAME_WIDTH);
@@ -72,12 +73,16 @@ public class Playing extends State {
   @Override
   public void update() {
 
-    if (!paused && !gameOver) {
+    if (paused) {
+      GameState.PAUSE.state.update();
+    } else if (levelCompleted) {
+      COMPLETED.state.update();
+    } else if (!gameOver) {
       levelHandler.update();
       player.update();
       enemyHandler.update(levelHandler.getCurrentLevel().levelData(), player);
       checkCloseToBorder();
-    } else GameState.PAUSE.state.update();
+    }
   }
 
   @Override
@@ -115,6 +120,8 @@ public class Playing extends State {
       GameState.PAUSE.state.draw(graphics);
     } else if (gameOver) {
       GAME_OVER.state.draw(graphics);
+    } else if (levelCompleted) {
+      COMPLETED.state.draw(graphics);
     }
   }
 
@@ -150,6 +157,8 @@ public class Playing extends State {
     }
     if (paused) {
       GameState.PAUSE.state.mousePressed(e);
+    } else if (levelCompleted) {
+      COMPLETED.state.mousePressed(e);
     }
   }
 
@@ -160,6 +169,8 @@ public class Playing extends State {
     }
     if (paused) {
       GameState.PAUSE.state.mouseReleased(e);
+    } else if (levelCompleted) {
+      COMPLETED.state.mouseReleased(e);
     }
   }
 
@@ -180,6 +191,8 @@ public class Playing extends State {
     }
     if (paused) {
       GameState.PAUSE.state.mouseMoved(e);
+    } else if (levelCompleted) {
+      COMPLETED.state.mouseMoved(e);
     }
   }
 

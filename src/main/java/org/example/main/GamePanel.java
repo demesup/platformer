@@ -13,30 +13,30 @@ import static org.example.main.Main.game;
 
 public class GamePanel extends JPanel {
 
-    public GamePanel() {
-        MouseInput mouseInputs = new MouseInput(this);
+  public GamePanel() {
+    MouseInput mouseInputs = new MouseInput(this);
 
-        setPanelSize();
-        addKeyListener(new KeyboardInput(this));
-        addMouseListener(mouseInputs);
-        addMouseMotionListener(mouseInputs);
-    }
+    setPanelSize();
+    addKeyListener(new KeyboardInput(this));
+    addMouseListener(mouseInputs);
+    addMouseMotionListener(mouseInputs);
+  }
 
 
-    private void setPanelSize() {
-        Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
-        setPreferredSize(size);
-    }
+  private void setPanelSize() {
+    Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
+    setPreferredSize(size);
+  }
 
-    public void paintComponent(Graphics graphics) {
-        super.paintComponent(graphics);
-        game.render(graphics);
-    }
+  public void paintComponent(Graphics graphics) {
+    super.paintComponent(graphics);
+    game.render(graphics);
+  }
 
-    public void updateGame() {
-    }
+  public void updateGame() {
+  }
 
-    public Game getGame() {
-        return game;
-    }
+  public Game getGame() {
+    return game;
+  }
 }

@@ -18,50 +18,50 @@ import static org.example.utils.LoadSafe.getCrabs;
 import static org.example.utils.constant.ItemInfo.CRABBY_I;
 
 public class EnemyHandler implements Updatable, Drawable, Resettable {
-    public static BufferedImage[][] crabbyImages;
-    private ArrayList<Crabby> crabbies = new ArrayList<>();
+  public static BufferedImage[][] crabbyImages;
+  private ArrayList<Crabby> crabbies = new ArrayList<>();
 
-    public EnemyHandler() {
-        loadEnemyImages();
-        addEnemies();
+  public EnemyHandler() {
+    loadEnemyImages();
+    addEnemies();
+  }
+
+  private void addEnemies() {
+    crabbies = getCrabs();
+  }
+
+  private void loadEnemyImages() {
+    crabbyImages = new BufferedImage[5][9];
+    BufferedImage temp = LoadSafe.getSpriteAtlas(Image.CRABBY);
+
+    for (int i = 0; i < crabbyImages.length; i++) {
+      for (int j = 0; j < crabbyImages[i].length; j++) {
+        crabbyImages[i][j] = temp.getSubimage(j * CRABBY_I.defaultWidth, i * CRABBY_I.defaultHeight, CRABBY_I.defaultWidth, CRABBY_I.defaultHeight);
+      }
     }
+  }
 
-    private void addEnemies() {
-        crabbies = getCrabs();
-    }
+  @Override
+  public void update(int[][] levelData, Player player) {
+    crabbies.stream().filter(Enemy::isActive).forEach(c -> c.update(levelData, player));
+  }
 
-    private void loadEnemyImages() {
-        crabbyImages = new BufferedImage[5][9];
-        BufferedImage temp = LoadSafe.getSpriteAtlas(Image.CRABBY);
+  @Override
+  public void draw(Graphics graphics, int xLevelOffset) {
+    drawCrabs(graphics, xLevelOffset);
+  }
 
-        for (int i = 0; i < crabbyImages.length; i++) {
-            for (int j = 0; j < crabbyImages[i].length; j++) {
-                crabbyImages[i][j] = temp.getSubimage(j * CRABBY_I.defaultWidth, i * CRABBY_I.defaultHeight, CRABBY_I.defaultWidth, CRABBY_I.defaultHeight);
-            }
-        }
-    }
+  private void drawCrabs(Graphics graphics, int xLevelOffset) {
+    crabbies.stream().filter(Enemy::isActive).forEach(c -> c.draw(graphics, xLevelOffset));
+  }
 
-    @Override
-    public void update(int[][] levelData, Player player) {
-        crabbies.stream().filter(Enemy::isActive).forEach(c -> c.update(levelData, player));
-    }
-
-    @Override
-    public void draw(Graphics graphics, int xLevelOffset) {
-        drawCrabs(graphics, xLevelOffset);
-    }
-
-    private void drawCrabs(Graphics graphics, int xLevelOffset) {
-        crabbies.stream().filter(Enemy::isActive).forEach(c -> c.draw(graphics, xLevelOffset));
-    }
-
-    public void checkEnemyHit(Rectangle2D.Float attackBox) {
-        crabbies.forEach(c -> {
-            if (attackBox.intersects(c.getHitBox())) {
-                c.receivedDamage(10);
-            }
-        });
-    }
+  public void checkEnemyHit(Rectangle2D.Float attackBox) {
+    crabbies.forEach(c -> {
+      if (attackBox.intersects(c.getHitBox())) {
+        c.receivedDamage(10);
+      }
+    });
+  }
 
   @Override
   public void resetAll() {

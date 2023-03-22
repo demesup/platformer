@@ -1,33 +1,53 @@
 package org.example.ui.gamestate;
 
 import org.example.interfaces.Drawable;
-import org.example.interfaces.Updatable;
 import org.example.interfaces.KeyEventResponse;
 import org.example.interfaces.MouseEventResponse;
+import org.example.interfaces.Updatable;
 import org.example.ui.button.Button;
 
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class State implements MouseEventResponse, KeyEventResponse, Drawable, Updatable {
-    protected Button[] buttons;
+  protected List<Button> buttons = new LinkedList<>();
 
-    public State() {
-    }
 
-    public boolean isIn(MouseEvent e, Button button) {
-        return button.getBounds().contains(e.getPoint());
-    }
+  public State() {
+  }
 
-    protected void resetButtons() {
-        for (Button button : buttons) {
-            button.resetBooleans();
-        }
-    }
+  public boolean isIn(MouseEvent e, Button button) {
+    return button.getBounds().contains(e.getPoint());
+  }
 
-    public void windowFocusLost() {
-    }
+  protected void resetButtons() {
+    buttons.forEach(Button::resetBooleans);
+  }
 
-    public void checkEnemyHit(Rectangle2D.Float attackBox) {
-    }
+  public void windowFocusLost() {
+  }
+
+  public void checkEnemyHit(Rectangle2D.Float attackBox) {
+  }
+
+
+  @Override
+  public void mouseMoved(MouseEvent e) {
+    buttons.forEach(button -> button.setMouseOver(false));
+
+    buttons.stream().filter(button -> isIn(e, button)).peek(System.out::println).findFirst().ifPresent(button -> button.setMouseOver(true));
+  }
+
+  @Override
+  public void mousePressed(MouseEvent e) {
+    buttons.stream().filter(button -> isIn(e, button)).findFirst().ifPresent(button -> button.setMousePressed(true));
+  }
+
+  @Override
+  public void mouseReleased(MouseEvent e) {
+    buttons.stream().filter(button -> isIn(e, button)).filter(Button::isMousePressed).findFirst().ifPresent(Button::applyGameState);
+    resetButtons();
+  }
 }

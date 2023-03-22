@@ -8,29 +8,29 @@ import static org.example.main.Main.game;
 
 
 public class GameWindow extends JFrame {
-    GamePanel panel;
+  GamePanel panel;
 
-    public GameWindow(GamePanel gamePanel) {
-        this.panel = gamePanel;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        add(gamePanel);
-        setResizable(false);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-        addWindowFocusListener(new WindowFocusListener() {
+  public GameWindow(GamePanel gamePanel) {
+    this.panel = gamePanel;
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    add(gamePanel);
+    setResizable(false);
+    pack();
+    setLocationRelativeTo(null);
+    setVisible(true);
+    addWindowFocusListener(new WindowFocusListener() {
 
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-                game.windowFocusLost();
-            }
+      @Override
+      public void windowLostFocus(WindowEvent e) {
+        game.windowFocusLost();
+      }
 
-            @Override
-            public void windowGainedFocus(WindowEvent e) {
+      @Override
+      public void windowGainedFocus(WindowEvent e) {
 
-            }
-        });
+      }
+    });
 
 
-    }
+  }
 }

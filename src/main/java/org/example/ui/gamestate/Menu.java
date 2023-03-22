@@ -6,7 +6,6 @@ import org.example.utils.constant.Image;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import static org.example.main.Game.*;
@@ -33,10 +32,9 @@ public class Menu extends State {
   }
 
   private void loadButtons() {
-    buttons = new MenuButton[3];
-    buttons[0] = new MenuButton(GAME_WIDTH / 2, (int) (150 * SCALE), 0, PLAYING);
-    buttons[1] = new MenuButton(GAME_WIDTH / 2, (int) (220 * SCALE), 1, OPTIONS);
-    buttons[2] = new MenuButton(GAME_WIDTH / 2, (int) (290 * SCALE), 2, QUIT);
+    buttons.add(new MenuButton(GAME_WIDTH / 2, (int) (150 * SCALE), 0, PLAYING));
+    buttons.add(new MenuButton(GAME_WIDTH / 2, (int) (220 * SCALE), 1, OPTIONS));
+    buttons.add(new MenuButton(GAME_WIDTH / 2, (int) (290 * SCALE), 2, QUIT));
   }
 
   @Override
@@ -55,30 +53,6 @@ public class Menu extends State {
     }
   }
 
-
-  @Override
-  public void mousePressed(MouseEvent e) {
-    for (Button button : buttons) {
-      if (isIn(e, button)) {
-        button.setMousePressed(true);
-        break;
-      }
-    }
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-    for (Button button : buttons) {
-      if (isIn(e, button)) {
-        if (button.isMousePressed()) {
-          button.applyGameState();
-          break;
-        }
-      }
-    }
-    resetButtons();
-  }
-
   @Override
   public void keyPressed(KeyEvent e) {
     switch (e.getKeyCode()) {
@@ -86,24 +60,5 @@ public class Menu extends State {
 
       case KeyEvent.VK_ESCAPE -> System.exit(0);
     }
-  }
-
-  @Override
-  public void mouseMoved(MouseEvent e) {
-    for (Button button : buttons) {
-      button.setMouseOver(false);
-    }
-
-    for (Button button : buttons) {
-      if (isIn(e, button)) {
-        button.setMouseOver(true);
-        break;
-      }
-    }
-  }
-
-  @Override
-  public void keyReleased(KeyEvent e) {
-
   }
 }
