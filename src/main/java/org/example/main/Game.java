@@ -10,6 +10,7 @@ public class Game {
   private final GamePanel gamePanel;
   public static final float SCALE = 1.5F;
   public static final int GAME_WIDTH = TILES_I.size * TILES_I.defaultWidth;
+  public static final int GAME_WIDTH_CENTER = GAME_WIDTH / 2;
   public static final int GAME_HEIGHT = TILES_I.size * TILES_I.defaultHeight;
 
   public Game() {

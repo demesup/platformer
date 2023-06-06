@@ -1,8 +1,8 @@
 package org.example.ui.gamestate.overlay;
 
 import org.example.interfaces.Updatable;
-import org.example.ui.button.Button;
 import org.example.ui.button.*;
+import org.example.ui.button.Button;
 import org.example.ui.gamestate.GameState;
 import org.example.ui.gamestate.Playing;
 import org.example.ui.gamestate.State;
@@ -10,9 +10,8 @@ import org.example.ui.gamestate.State;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import static org.example.main.Game.GAME_WIDTH;
+import static org.example.main.Game.GAME_WIDTH_CENTER;
 import static org.example.main.Game.SCALE;
 import static org.example.ui.button.SoundButton.SOUND_SIZE;
 import static org.example.ui.button.UrmButton.URM_SIZE;
@@ -24,7 +23,7 @@ import static org.example.utils.constant.ItemInfo.SLIDER_I;
 import static org.example.utils.constant.ItemInfo.VOLUME_I;
 
 public class PauseOverlay extends State {
-//  private final ArrayList<PauseButton> buttons = new ArrayList<>();
+  //  private final ArrayList<PauseButton> buttons = new ArrayList<>();
   private final Playing playing = (Playing) GameState.PLAYING.state;
   private BufferedImage backgroundImg;
   private int bgX, bgY, bgW, bgH;
@@ -53,9 +52,15 @@ public class PauseOverlay extends State {
     int unpauseX = (int) (462 * SCALE);
     int bY = (int) (325 * SCALE);
 
-    menuButton = new UrmButton(menuX, bY, URM_SIZE, URM_SIZE, 2);
-    replayButton = new UrmButton(replayX, bY, URM_SIZE, URM_SIZE, 1);
-    unpauseButton = new UrmButton(unpauseX, bY, URM_SIZE, URM_SIZE, 0);
+    menuButton = new UrmButton(menuX, bY, URM_SIZE, URM_SIZE, 2, () -> {
+      GAME_STATE = GameState.MENU;
+      playing.unpauseGame();
+    });
+    replayButton = new UrmButton(replayX, bY, URM_SIZE, URM_SIZE, 1, () -> {
+      playing.resetButtons();
+      playing.unpauseGame();
+    });
+    unpauseButton = new UrmButton(unpauseX, bY, URM_SIZE, URM_SIZE, 0, playing::unpauseGame);
 
     buttons.add(menuButton);
     buttons.add(replayButton);
@@ -66,8 +71,8 @@ public class PauseOverlay extends State {
     int soundX = (int) (450 * SCALE);
     int musicY = (int) (140 * SCALE);
     int sfxY = (int) (186 * SCALE);
-    musicButton = new SoundButton(soundX, musicY, SOUND_SIZE, SOUND_SIZE);
-    sfxButton = new SoundButton(soundX, sfxY, SOUND_SIZE, SOUND_SIZE);
+    musicButton = new SoundButton(soundX, musicY, SOUND_SIZE, SOUND_SIZE, () -> musicButton.setMuted(!musicButton.isMuted()));
+    sfxButton = new SoundButton(soundX, sfxY, SOUND_SIZE, SOUND_SIZE, () -> sfxButton.setMuted(!sfxButton.isMuted()));
 
     buttons.add(musicButton);
     buttons.add(sfxButton);
@@ -77,7 +82,7 @@ public class PauseOverlay extends State {
     backgroundImg = getSpriteAtlas(PAUSE_BACKGROUND);
     bgW = (int) (backgroundImg.getWidth() * SCALE);
     bgH = (int) (backgroundImg.getHeight() * SCALE);
-    bgX = GAME_WIDTH / 2 - bgW / 2;
+    bgX = GAME_WIDTH_CENTER - bgW / 2;
     bgY = (int) (25 * SCALE);
 
   }
@@ -94,43 +99,27 @@ public class PauseOverlay extends State {
   }
 
 
+  @Override
   public void mouseDragged(MouseEvent e) {
     if (volumeButton.isMousePressed()) {
       volumeButton.changeX(e.getX());
-      System.out.println(volumeButton.getX());
     }
   }
 
+  @Override
   public void mousePressed(MouseEvent e) {
     buttons.stream().filter(b -> isIn(e, b)).findFirst().ifPresent(b -> b.setMousePressed(true));
   }
 
+  @Override
   public void mouseReleased(MouseEvent e) {
-    if (isIn(e, musicButton)) {
-      if (musicButton.isMousePressed())
-        musicButton.setMuted(!musicButton.isMuted());
-
-    } else if (isIn(e, sfxButton)) {
-      if (sfxButton.isMousePressed())
-        sfxButton.setMuted(!sfxButton.isMuted());
-    } else if (isIn(e, menuButton)) {
-      if (menuButton.isMousePressed()) {
-        GAME_STATE = GameState.MENU;
-        playing.unpauseGame();
-      }
-    } else if (isIn(e, replayButton)) {
-      if (replayButton.isMousePressed()) {
-        playing.resetButtons();
-        playing.unpauseGame();
-      }
-    } else if (isIn(e, unpauseButton)) {
-      if (unpauseButton.isMousePressed())
-        playing.unpauseGame();
-    }
+    buttons.stream().filter(button -> isIn(e, musicButton))
+        .findFirst().filter(Button::isMousePressed).ifPresent(Button::runOnPressed);
     buttons.forEach(Button::resetBooleans);
-    OVERLAY = null;
+    if (isIn(e, unpauseButton) || isIn(e, replayButton) || isIn(e, menuButton)) OVERLAY = null;
   }
 
+  @Override
   public void mouseMoved(MouseEvent e) {
     buttons.forEach(b -> b.setMouseOver(false));
     buttons.stream().filter(b -> isIn(e, b)).findFirst().ifPresent(b -> b.setMouseOver(true));

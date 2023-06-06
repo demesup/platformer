@@ -5,6 +5,7 @@ import org.example.utils.constant.Image;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static org.example.main.Game.GAME_WIDTH_CENTER;
 import static org.example.utils.LoadSafe.getSpriteAtlas;
 import static org.example.utils.constant.ItemInfo.SLIDER_I;
 import static org.example.utils.constant.ItemInfo.VOLUME_I;
@@ -25,16 +26,18 @@ public class VolumeButton extends PauseButton {
     this.x = x;
     this.width = width;
     loadImages();
-    minX = x + VOLUME_I.width / 2;
-    maxX = minX + width - VOLUME_I.width;
+    minX = GAME_WIDTH_CENTER - SLIDER_I.width / 2 + VOLUME_I.width / 2;
+    maxX = minX + SLIDER_I.width - VOLUME_I.width;
   }
 
   public void changeX(int x) {
-    System.out.println(x);
-    System.out.println(minX);
     if (x < minX) {
       buttonX = minX;
-    } else buttonX = Math.min(x, maxX);
+      setX(minX);
+    } else {
+      buttonX = Math.min(x, maxX);
+      setX(x);
+    }
 
     bounds.x = buttonX - VOLUME_I.width / 2;
   }
@@ -52,7 +55,7 @@ public class VolumeButton extends PauseButton {
 
   @Override
   public void draw(Graphics graphics) {
-    graphics.drawImage(slider, x, y, width, height, null);
+    graphics.drawImage(slider, GAME_WIDTH_CENTER - SLIDER_I.width / 2, y, width, height, null);
     graphics.drawImage(images[index], buttonX - VOLUME_I.width / 2, y, VOLUME_I.width, VOLUME_I.height, null);
   }
 
