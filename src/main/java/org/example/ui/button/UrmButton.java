@@ -14,8 +14,8 @@ public class UrmButton extends PauseButton {
   private int index;
   private BufferedImage[] images;
 
-  public UrmButton(int x, int y, int width, int height, int rowIndex) {
-    super(x, y, width, height, rowIndex);
+  public UrmButton(int x, int y, int width, int height, int rowIndex, Runnable whenPressed) {
+    super(x, y, width, height, rowIndex, whenPressed);
     loadImages();
   }
 

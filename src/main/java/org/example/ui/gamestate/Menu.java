@@ -27,7 +27,7 @@ public class Menu extends State {
     plateImage = getSpriteAtlas(Image.MENU_PLATE);
     menuWidth = (int) (plateImage.getWidth() * SCALE);
     menuHeight = (int) (plateImage.getHeight() * SCALE);
-    menuX = GAME_WIDTH / 2 - menuWidth / 2;
+    menuX = GAME_WIDTH_CENTER- menuWidth / 2;
     menuY = (int) (45 * SCALE);
   }
 

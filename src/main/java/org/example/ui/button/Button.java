@@ -10,6 +10,14 @@ public abstract class Button implements Updatable, Drawable {
   protected Rectangle bounds;
   protected boolean mouseOver, mousePressed;
   protected int rowIndex;
+  Runnable whenPressed;
+
+  public Button(int x, int y, Rectangle bounds, Runnable whenPressed) {
+    this.x = x;
+    this.y = y;
+    this.bounds = bounds;
+    this.whenPressed = whenPressed;
+  }
 
   public Button(int x, int y, Rectangle bounds) {
     this.x = x;
@@ -17,11 +25,12 @@ public abstract class Button implements Updatable, Drawable {
     this.bounds = bounds;
   }
 
-  public Button(int x, int y, int rowIndex, Rectangle bounds) {
+  public Button(int x, int y, int rowIndex, Rectangle bounds, Runnable whenPressed) {
     this.x = x;
     this.y = y;
     this.rowIndex = rowIndex;
     this.bounds = bounds;
+    this.whenPressed = whenPressed;
   }
 
 
@@ -74,4 +83,10 @@ public abstract class Button implements Updatable, Drawable {
   }
 
   protected abstract void loadImages();
+
+  public void runOnPressed() {
+    if (mousePressed) {
+      whenPressed.run();
+    }
+  }
 }

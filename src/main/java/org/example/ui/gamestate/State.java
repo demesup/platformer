@@ -37,7 +37,7 @@ public abstract class State implements MouseEventResponse, KeyEventResponse, Dra
   public void mouseMoved(MouseEvent e) {
     buttons.forEach(button -> button.setMouseOver(false));
 
-    buttons.stream().filter(button -> isIn(e, button)).peek(System.out::println).findFirst().ifPresent(button -> button.setMouseOver(true));
+    buttons.stream().filter(button -> isIn(e, button)).findFirst().ifPresent(button -> button.setMouseOver(true));
   }
 
   @Override
