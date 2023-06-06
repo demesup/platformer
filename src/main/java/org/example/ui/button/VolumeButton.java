@@ -30,6 +30,8 @@ public class VolumeButton extends PauseButton {
   }
 
   public void changeX(int x) {
+    System.out.println(x);
+    System.out.println(minX);
     if (x < minX) {
       buttonX = minX;
     } else buttonX = Math.min(x, maxX);

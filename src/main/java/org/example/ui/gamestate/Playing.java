@@ -23,7 +23,7 @@ public class Playing extends State {
   private Player player;
   private boolean paused = false;
   private boolean gameOver = false;
-  private boolean levelCompleted = true;
+  private boolean levelCompleted = false;
 
   private int xLvlOffset;
   private final int leftBorder = (int) (0.2 * GAME_WIDTH);

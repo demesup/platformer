@@ -24,7 +24,7 @@ import static org.example.utils.constant.ItemInfo.SLIDER_I;
 import static org.example.utils.constant.ItemInfo.VOLUME_I;
 
 public class PauseOverlay extends State {
-  private final ArrayList<PauseButton> buttons = new ArrayList<>();
+//  private final ArrayList<PauseButton> buttons = new ArrayList<>();
   private final Playing playing = (Playing) GameState.PLAYING.state;
   private BufferedImage backgroundImg;
   private int bgX, bgY, bgW, bgH;
@@ -97,6 +97,7 @@ public class PauseOverlay extends State {
   public void mouseDragged(MouseEvent e) {
     if (volumeButton.isMousePressed()) {
       volumeButton.changeX(e.getX());
+      System.out.println(volumeButton.getX());
     }
   }
 
