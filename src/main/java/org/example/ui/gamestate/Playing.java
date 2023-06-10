@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 import static org.example.main.Game.*;
@@ -203,7 +205,6 @@ public class Playing extends State {
       return;
     }
     switch (e.getKeyCode()) {
-//            case KeyEvent.VK_W, KeyEvent.VK_UP -> player.setUp(true);
       case KeyEvent.VK_A, KeyEvent.VK_LEFT -> player.setLeft(true);
       case KeyEvent.VK_S, KeyEvent.VK_DOWN -> player.setDown(true);
       case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> player.setRight(true);
@@ -223,7 +224,6 @@ public class Playing extends State {
       return;
     }
     switch (e.getKeyCode()) {
-//            case KeyEvent.VK_W, KeyEvent.VK_UP -> player.setUp(false);
       case KeyEvent.VK_A, KeyEvent.VK_LEFT -> player.setLeft(false);
       case KeyEvent.VK_S, KeyEvent.VK_DOWN -> player.setDown(false);
       case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> player.setRight(false);
@@ -231,6 +231,7 @@ public class Playing extends State {
     }
   }
 
+  @Override
   public void unpauseGame() {
     paused = false;
   }
