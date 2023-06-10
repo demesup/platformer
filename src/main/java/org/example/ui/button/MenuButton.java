@@ -11,20 +11,14 @@ import static org.example.utils.LoadSafe.getSpriteAtlas;
 import static org.example.utils.constant.ItemInfo.BUTTON_I;
 
 public class MenuButton extends Button {
-  private GameState state;
   private static final int xOffsetCenter = BUTTON_I.width / 2;
   private int index;
   private BufferedImage[] images;
 
   public MenuButton(int x, int y, int rowIndex, GameState state) {
-    super(x, y, new Rectangle(x - xOffsetCenter, y, BUTTON_I.width, BUTTON_I.height));
+    super(x, y, new Rectangle(x - xOffsetCenter, y, BUTTON_I.width, BUTTON_I.height), ()-> GAME_STATE = state);
     this.rowIndex = rowIndex;
-    this.state = state;
     loadImages();
-  }
-
-  public void applyGameState() {
-    GAME_STATE = state;
   }
 
 

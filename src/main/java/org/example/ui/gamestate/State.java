@@ -42,12 +42,18 @@ public abstract class State implements MouseEventResponse, KeyEventResponse, Dra
 
   @Override
   public void mousePressed(MouseEvent e) {
-    buttons.stream().filter(button -> isIn(e, button)).findFirst().ifPresent(button -> button.setMousePressed(true));
+    buttons.stream().filter(b -> isIn(e, b)).findFirst().ifPresent(b -> b.setMousePressed(true));
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
-    buttons.stream().filter(button -> isIn(e, button)).filter(Button::isMousePressed).findFirst().ifPresent(Button::applyGameState);
+    buttons.stream().filter(button -> isIn(e, button))
+        .findFirst().filter(Button::isMousePressed)
+        .ifPresent(Button::runOnPressed);
     resetButtons();
+  }
+
+  public void unpauseGame(){
+
   }
 }

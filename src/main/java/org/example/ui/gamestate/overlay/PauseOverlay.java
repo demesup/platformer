@@ -23,7 +23,6 @@ import static org.example.utils.constant.ItemInfo.SLIDER_I;
 import static org.example.utils.constant.ItemInfo.VOLUME_I;
 
 public class PauseOverlay extends State {
-  //  private final ArrayList<PauseButton> buttons = new ArrayList<>();
   private final Playing playing = (Playing) GameState.PLAYING.state;
   private BufferedImage backgroundImg;
   private int bgX, bgY, bgW, bgH;
@@ -113,15 +112,8 @@ public class PauseOverlay extends State {
 
   @Override
   public void mouseReleased(MouseEvent e) {
-    buttons.stream().filter(button -> isIn(e, musicButton))
-        .findFirst().filter(Button::isMousePressed).ifPresent(Button::runOnPressed);
-    buttons.forEach(Button::resetBooleans);
+    super.mouseReleased(e);
     if (isIn(e, unpauseButton) || isIn(e, replayButton) || isIn(e, menuButton)) OVERLAY = null;
   }
 
-  @Override
-  public void mouseMoved(MouseEvent e) {
-    buttons.forEach(b -> b.setMouseOver(false));
-    buttons.stream().filter(b -> isIn(e, b)).findFirst().ifPresent(b -> b.setMouseOver(true));
-  }
 }
