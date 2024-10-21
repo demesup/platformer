@@ -1,6 +1,5 @@
 package org.example.utils;
 
-import lombok.SneakyThrows;
 import org.example.entity.Crabby;
 import org.example.utils.constant.EnemyType;
 import org.example.utils.constant.Image;
@@ -9,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -60,8 +60,7 @@ public class LoadSafe {
     return crabbies;
   }
 
-  @SneakyThrows
-  public static List<BufferedImage> getAllLevels() {
+  public static List<BufferedImage> getAllLevels() throws IOException {
     URL url = LoadSafe.class.getResource("levels");
     File file = null;
     try {

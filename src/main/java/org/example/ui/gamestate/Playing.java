@@ -74,7 +74,6 @@ public class Playing extends State {
 
   @Override
   public void update() {
-
     if (paused) {
       GameState.PAUSE.state.update();
     } else if (levelCompleted) {

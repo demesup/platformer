@@ -48,6 +48,8 @@ public class Player extends Entity  {
   @Override
   public void update() {
     updateHealthBar();
+
+
     if (currentHealth <= 0) {
       Playing playing = (Playing) GameState.PLAYING.state;
       playing.setGameOver(true);
